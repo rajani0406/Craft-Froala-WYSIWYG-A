@@ -1,0 +1,33 @@
+{% import "_includes/forms" as forms %}
+{% import "froalaEditor/_includes/macros" as macros %}
+
+{% set uploadInstructions = 'Where should files be uploaded when they are dragged directly onto the field, or uploaded from the front end?' %}
+{% set uploadInstructions = uploadInstructions ~ ' Note that the subfolder path can contain variables like <code>{slug}</code> or <code>{author.username}</code>.' %}
+
+{{ forms.field({
+    label: 'Images Location'|t,
+    instructions: uploadInstructions|t,
+    errors: settings.getErrors('assetsImagesSubPath')
+}, macros.uploadLocationInput('assetsImages', settings, sourceOptions)) }}
+
+{{ forms.field({
+    label: 'Files Location'|t,
+    instructions: uploadInstructions|t,
+    errors: settings.getErrors('assetsFilesSubPath')
+}, macros.uploadLocationInput('assetsFiles', settings, sourceOptions)) }}
+
+<hr>
+
+{{ forms.selectField({
+    id: 'froala-editor-config',
+    label: "Custom Editor Config"|t(),
+    name: 'editorConfig',
+    options: editorConfigOptions,
+    value: settings.editorConfig,
+    instructions: "You can save custom {name} configs as {ext} files in {path}."|t({
+        name: 'Froala Editor',
+        ext: '`.json`',
+        path: '`config/froalaeditor/`'
+    }) ~
+    ' <a href="https://www.froala.com/wysiwyg-editor/docs/options" target="_blank">' ~ "View available options"|t ~ '</a>'
+}) }}
